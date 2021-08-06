@@ -1,2 +1,1 @@
-"# SmartEdu-Project" 
-"# SmartEdu-Project" 
+SmartEdu Project
