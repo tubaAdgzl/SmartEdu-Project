@@ -66,4 +66,7 @@ exports.sendEmail = async (req,res) =>{
       // Preview only available when sending through an Ethereal account
       console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
       // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    }   
+
+      req.flash("success","We received your message successfully")
+      res.status(200).redirect("/contact");
+    }
