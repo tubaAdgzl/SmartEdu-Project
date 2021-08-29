@@ -32,7 +32,7 @@
 											<h2><a href="/courses/<%= user.courses[i].slug %>" title=""><%= user.courses[i].name %></a></h2>
 										</div>
 										<div class="course-desc">
-											<p><%= user.courses[i].description.substring(0,100) + "..." %></p>
+											<p><%= user.courses[i].description %></p>
 										</div>
 									</div>
 								</div>
@@ -53,7 +53,17 @@
 			<div id="overviews" class="section wb">
 				<div class="container">
 					<div class="row"> 
-
+						<% if(flashMessages) { %>
+							<% if(flashMessages.success) { %>
+								<div class="alert alert-success">
+									<%= flashMessages.success %>
+								</div>
+							<% } else if(flashMessages.error) { %>
+								<div class="alert alert-danger">
+									<%= flashMessages.error %>
+								</div>
+							<% } %>
+						<% } %>
 					<!-- Button trigger modal -->
 						<div class="col-lg-12 text-center">			
 							<button type="button" class="btn btn-lg btn-warning rounded-0 text-white" data-toggle="modal" data-target="#addCourse">
@@ -77,7 +87,7 @@
 							<div class="col-lg-6 col-md-6 col-12">
 								<div class="course-item mb-5">
 									<div class="image-blog">
-										<img src="/images/blog_1.jpg" alt="" class="img-fluid">
+										<img src="/images/blog_1.jpg" alt="" class="img-fluid" style="width:800px; height:400px;">
 									</div>
 									<div class="course-br">
 										<div class="course-title">
@@ -86,9 +96,69 @@
 										<div class="course-desc">
 											<p><%= courses[i].description %></p>
 										</div>
+										<div class="clearfix">
+											<ul style="list-style-type: none;">
+												<li style="float:left;">
+													<button class="btn btn-warning text-white" data-toggle="modal" 
+														data-target="#updateCourse<%= courses[i]._id %>" >UPDATE</button>
+												</li>
+												<li style="float:right;">
+													<a href="/courses/<%= courses[i].slug %>?_method=DELETE" 
+														onclick="return confirm('ARE YOU SURE?')"
+														class="btn btn-danger text-white">DELETE</a>
+												</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 							</div><!-- end col -->
+						<!-- UPDATE  Modal -->
+							<div class="modal fade" id="updateCourse<%= courses[i]._id %>" tabindex="-1" role="dialog" aria-labelledby="updateCourseLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+									<h5 class="modal-title" id="updateCourseLabel">Update Course</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									</div>
+									<div class="modal-body">
+										<form method="POST" action="/courses/<%= courses[i].slug %>?_method=PUT" class="form-horizontal">
+											<div class="form-group">
+												<div class="col-sm-12">
+													<input type="text" name="name" class="form-control" value="<%= courses[i].name %>" placeholder="Course Name">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<input type="hidden" name="role" class="form-control" value="<%= user.role %>">
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<textarea rows="8" name="description" class="form-control"
+													placeholder="Course Description" required><%= courses[i].description %></textarea>
+												</div>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-12">
+													<select name="category" class="form-control">
+														<% for (let i=0; i< categories.length; i++) { %>
+															<option value="<%= categories[i]._id %>"><%= categories[i].name %></option>
+														<% } %>
+													</select>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-primary">Save</button>
+											</div>
+										</form>
+									</div>
+									
+								</div>
+								</div>
+							</div>
 						<% } %>	
 						
 					</div><!-- end row -->
